@@ -14,7 +14,7 @@ Ein datenbasiertes Streamlit-Projekt zur Analyse des Karrierepotenzials von NBA-
 
 streamlit run 1_🏀_Homepage.py
 
-###👥 Team
+### 👥 Team
 Isabelle Haehl · Florian Löb · Anna Muravyeva
 
 #### 🔧 Voraussetzungen

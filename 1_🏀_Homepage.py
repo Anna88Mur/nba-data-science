@@ -3,16 +3,17 @@ import os
 import streamlit as st
 from style_utils import set_app_config, show_sidebar_info, load_custom_css
 
-
 os.chdir(os.path.dirname(__file__))
 
 
-show_sidebar_info()
+
 set_app_config(
     title="NBA Data Science Projekt",
     icon="🏀",
     layout="wide"
 )
+
+show_sidebar_info()
 
 load_custom_css()
 
@@ -64,5 +65,6 @@ col8.image("images/kareem_logo.jpg", caption="Lakers", width=120)
 
 col9.metric("✊ Erster afroamerikanischer NBA-Spieler", "Earl Lloyd", "1950")
 col9.image("images/earl_lloyd.jpg", caption="Washington Capitols", width=120)
+
 
 st.markdown("### 📊 Entdecke weitere Analysen im Menü links!")
