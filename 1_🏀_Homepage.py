@@ -81,39 +81,41 @@ st.markdown("Ein Blick zurück auf wichtige Momente in der NBA-Geschichte.")
 milestones = pd.DataFrame({
     "Spieler": [
         "Bill Russell", "Wilt Chamberlain", "Kareem Abdul-Jabbar",
-        "Kareem Abdul-Jabbar", "Larry Bird", "Michael Jordan",
-        "Kobe Bryant", "LeBron James", "Stephen Curry",
-        "Bill Walton", "Magic Johnson", "Julius Erving",
-        "Shaquille O'Neal", "Dirk Nowitzki"
+        "Larry Bird", "Magic Johnson", "Michael Jordan", "Shaquille O'Neal",
+        "Kobe Bryant", "Tim Duncan", "Dirk Nowitzki", "LeBron James", "Stephen Curry"
     ],
     "Ereignis": [
-        "11 Meisterschaften, 12 Mal NBA ALL-STAR, 5 Mal MVP",  # 50er–60er
-        "100 Punkte in einem Spiel Am 2. März 1962 erzielte er in einem Spiel gegen die New York Knicks ganze 100 Punkte,ein in der NBA bis heute unerreichter Rekord",                  # 1962
-        "Meiste Karrierepunkte (1984 Rekord), 50 Greatest Players in NBA History",        # Einstieg
-        "1. MVP mit Milwaukee (1971), Bester Korbschütze der NBA",                # 1971
-        "3 MVPs in Folge",                            # 1984–86
-        "Er wurde fünfmal als Wertvollster Spieler der NBA ausgezeichnet",                          # 1991–98
-        "81 Punkte Spiel",                            # 2006
-        "Basketball hero LeBron James is the NBA's all-time top scorer",                            # 2023
-        "4x Meister,  NBA three-point scoring leader",                                 # ab 2015
-        "Finals MVP mit Blazers",                     # 1977
-        "Finals MVP als Rookie",                      # 1980
-        "ABA-Legende & NBA-MVP",                      # 1976–81
-        "3x Finals MVP",                              # 2000–2002
-        "Erster Europäer mit MVP",                    # 2007
+        "🏆 11× NBA Champion, 5× MVP, 12× All-Star",
+        "💯 100 Punkte in einem Spiel (1962), 2× NBA Champion,13x All Star,4x MVP",
+        "🏀 Meiste Karrierepunkte bis 2023, 6× MVP, 15x All-NBA",
+        "🎯 3× MVP in Folge, 3× Champion mit Celtics",
+        "⚡ Rookie-Finals-MVP, 5× Champion mit Lakers, 3x MVP",
+        "🐐 6× Champion, 5× MVP, 10× Scoring Leader, 14x All Star",
+        "🔒 3× Finals MVP, dominant in der Zone, 15x All Star",
+        "🎯 81 Punkte in einem Spiel, 5× NBA Champion, 18x All Star",
+        "🌟 2× MVP, 5× Champion mit Spurs, Mr. Fundament, 15x All Star",
+        "🇩🇪 2007 MVP, 2011 Champion, bester Europäer",
+        "👑 All-Time Top Scorer, 4× Champion, 4× MVP",
+        "🎯 4× Champion, 2× MVP, Revolution des Dreiers"
     ],
     "Start": [
-        "1957-01-01", "1962-03-02", "1984-10-26",
-        "1971-05-01", "1984-01-01", "1991-01-01",
-        "2006-01-22", "2023-02-07", "2015-06-16",
-        "1977-06-05", "1980-05-16", "1976-01-01",
-        "2000-06-01", "2007-05-06"
+        "1956-11-01", "1959-10-24", "1969-10-18",
+        "1979-10-12", "1979-10-12", "1984-10-26", "1992-11-06",
+        "1996-11-03", "1997-10-31", "1998-02-05", "2003-10-29", "2009-10-28"
+    ],
+    "Ende": [
+        "1969-05-05", "1973-04-01", "1989-06-28",
+        "1992-04-30", "1996-05-02", "2003-04-16", "2011-04-13",
+        "2016-04-13", "2016-05-12", "2019-04-10", "2025-07-01", "2025-07-01"
     ]
 })
 
 
 milestones["Start"] = pd.to_datetime(milestones["Start"])
-milestones["Ende"] = milestones["Start"] + pd.DateOffset(days=90)  # längere Balken
+milestones["Ende"] = pd.to_datetime(milestones["Ende"])
+
+milestones["Start_Jahr"] = milestones["Start"].dt.year
+milestones["Ende_Jahr"] = milestones["Ende"].dt.year
 
 fig = px.timeline(
     milestones,
@@ -121,19 +123,25 @@ fig = px.timeline(
     x_end="Ende",
     y="Spieler",
     color="Spieler",
-    custom_data=["Ereignis"],
-    title="Historische Meilensteine – NBA"
+    custom_data=["Ereignis", "Start_Jahr", "Ende_Jahr"],
+    title="Historische Karrieren der NBA-Legenden"
 )
 
 fig.update_yaxes(autorange="reversed")  # wichtig für Timeline
 fig.update_layout(
     template="plotly_dark",
-    height=600,
+    height=650,
     margin=dict(l=20, r=20, t=60, b=20),
-    title_font_size=22
+    title_font_size=22,
+    xaxis=dict(
+        tickformat="%Y",    # Nur Jahr anzeigen
+        tick0="1950-01-01",
+        dtick="M60",        # alle 60 Monate = 5 Jahre
+    )
 )
+
 fig.update_traces(
-    hovertemplate="<b>%{y}</b><br>%{customdata[0]}<extra></extra>"
+    hovertemplate="<b>%{y}</b><br>%{customdata[0]}<br>Karriere: %{customdata[1]} – %{customdata[2]}<extra></extra>"
 )
 st.plotly_chart(fig, use_container_width=True)
 
