@@ -24,9 +24,9 @@ st.markdown("""
         <ul>
             <li><a href="#boxplot-alter-der-mvp-kandidaten">📊 Boxplot: Alter der MVP-Kandidaten</a></li>
             <li><a href="#histogramm-altersverteilung-der-mvp-kandidaten">📈 Histogramm: Altersverteilung der MVP-Kandidaten</a></li>
-            <li>Vergleich von Statistiken (PPG, WS, PER etc.)</li>
-            <li>Histogramme, Boxplots</li>
+            <li><a href="#verteilung-mvp-stimmen">🏆 Verteilung MVP-Stimmenanteil</a></li>
             <li><a href="#durchschnittswerte-pro-saison">📅 Durchschnittswerte pro Saison</a></li>
+            <li><a href="#effizienzvergleich-mvps-vs-nicht-mvps">🎯Effizienzvergleich: MVPs vs. Nicht-MVPs</a></li>
         </ul>
 
 </div>
@@ -34,19 +34,15 @@ st.markdown("""
 
 
 # --- CSV einlesen ---
-df = pd.read_csv("NBA_Dataset.csv")
+df = pd.read_csv("data/NBA_Dataset.csv")
+
+df = df.reset_index()
 
 # --- MVP-Spieler herausfiltern ---
 df_mvp = df[df['award_share'] > 0]
 
 
-st.markdown("""
-<div style='padding: 1rem; background-color: #1f2633 ; border-radius: 0.5rem;'>
-    <strong>💡 Interpretation (was du im Vortrag sagen könntest):</strong><br>
-    Die meisten Spieler, die MVP-Stimmen erhalten, sind zwischen <strong>25 und 30 Jahre alt</strong> – 
-    also mitten in ihrer Prime. Nur wenige jüngere oder ältere Spieler schaffen es, Stimmen zu bekommen.
-</div>
-""", unsafe_allow_html=True)
+
 
 # --- Boxplot: Alter der MVP-Spieler ---
 # Anker: Boxplot
@@ -59,6 +55,25 @@ ax1.set_xlabel('Alter')
 ax1.grid(True)
 st.pyplot(fig1)
 
+st.markdown("""
+<div style='padding: 1rem; background-color: #1f2633 ; border-radius: 0.5rem;'>
+    <strong>💡 Interpretation:</strong><br>
+    Die meisten Spieler, die MVP-Stimmen erhalten, sind zwischen <strong>25 und 30 Jahre alt</strong> – 
+    also mitten in ihrer Prime. Nur wenige jüngere oder ältere Spieler schaffen es, Stimmen zu bekommen.
+</div>
+""", unsafe_allow_html=True)
+
+old_mvps = df_mvp[df_mvp['age'] > 37]
+if not old_mvps.empty:
+    st.markdown("""
+    <div style='padding: 0.5rem; background-color: #1f2633; border-radius: 0.5rem; margin-top: 1rem;'>
+        <strong>📌 Hinweis:</strong> Folgende Spieler waren älter als 37 Jahre und erhielten dennoch MVP-Stimmen:
+    </div>
+    """, unsafe_allow_html=True)
+    st.dataframe(old_mvps[['player', 'age', 'season', 'award_share']], use_container_width=True)
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+
 # --- Histogramm: Alter der MVP-Spieler ---
 st.header("📈 Histogramm: Altersverteilung der MVP-Kandidaten")
 
@@ -69,6 +84,38 @@ ax2.set_xlabel('Alter')
 ax2.set_ylabel('Anzahl der Spieler')
 ax2.grid(True)
 st.pyplot(fig2)
+
+
+# 📉 Histogramm der award_share-Werte (Stimmenanteil)
+st.header("🏆 Verteilung MVP-Stimmenanteil", anchor="verteilung-mvp-stimmen")
+
+fig_award, ax_award = plt.subplots(figsize=(10, 5))
+sns.histplot(df_mvp['award_share'], bins=30, kde=True, color='green', ax=ax_award)
+ax_award.set_title('Verteilung der MVP-Stimmen (nur Spieler mit Stimmen)')
+ax_award.set_xlabel('MVP-Stimmenanteil (award_share)')
+ax_award.set_ylabel('Anzahl der Spieler')
+ax_award.grid(True)
+st.pyplot(fig_award)
+
+with st.expander("ℹ️ Interpretation der Verteilung der MVP-Stimmenanteile"):
+    st.markdown(f"""
+    Die Analyse der Variable **award_share** – also des Anteils der MVP-Stimmen eines Spielers – liefert interessante Erkenntnisse:
+
+    - 🟢 **Viele Spieler erhalten nur einen sehr geringen Stimmenanteil** (knapp über 0). Das zeigt, dass sie zwar im Voting erscheinen, aber keine realistische Chance auf den Titel haben.
+    - 🟡 **Wenige Spieler erreichen hohe Werte** (nahe 1.0). Diese Spieler dominieren das Voting und sind meist die tatsächlichen MVPs ihrer Saison.
+                
+    Um MVP zu werden, braucht man:
+
+    🔹Den höchsten award_share der Saison
+
+    🔹Typischerweise: award_share ≥ 0.80
+
+    🔹Es muss nicht 1.0 sein, aber je näher, desto klarer der Sieg.            
+    
+    ➕ **Fazit:** Das MVP-Voting ist breit gefächert, aber nur wenige Ausnahmespieler stechen heraus. Ein hoher **award_share** ist ein starker Indikator für die sportliche Dominanz in einer Saison.
+    
+""", unsafe_allow_html=True)
+
 
 
 
@@ -99,9 +146,49 @@ ax.set_title(f"Durchschnittswerte in der Saison {selected_season}")
 st.pyplot(fig)
 
 st.markdown(f"""
-<div style='padding: 1rem; background-color: #1f2633 ; border-radius: 0.5rem;'>
-    <strong>💡 Interpretation:</strong><br>
-    In der Saison <strong>{selected_season}</strong> zeigen MVP-Kandidaten im Durchschnitt deutlich höhere Werte 
-    bei <em>Points per Game</em>, <em>Win Shares</em> und <em>Player Efficiency Rating</em> – was ihre wichtige Rolle im Team widerspiegelt.
-</div>
+
+    <b>💡 Interpretation:</b><br><br>
+    In der Saison <b>{selected_season}</b> zeigen MVP-Kandidaten im Durchschnitt deutlich höhere Werte 
+    bei folgenden Statistiken:<br><br>
+
+    🔹<b>PTS per Game</b> – Punkte pro Spiel: Wie viele Punkte ein Spieler im Durchschnitt erzielt.<br>
+    🔹<b>AST per Game</b> – Assists pro Spiel: Wie oft ein Spieler seinen Mitspielern beim Punkten hilft.<br>
+    🔹<b>TRB per Game</b> – Rebounds pro Spiel: Zurückgeholte Bälle nach Fehlwürfen.<br>
+    🔹<b>PER</b> – Player Efficiency Rating: Eine umfassende Bewertungszahl für Effizienz und Gesamtleistung.<br>
+    🔹<b>WS</b> – Win Shares: Schätzung, wie viel ein Spieler zum Teamerfolg beigetragen hat.<br><br>
+    Diese Zahlen zeigen, dass MVP-Kandidaten sowohl in der Offensive als auch in der Gesamtwirkung herausragen.
 """, unsafe_allow_html=True)
+
+
+
+# --- Nur nötige Spalten und keine NaNs ---
+effizienz_df = df[['is_mvp', 'ts_pct', 'efg_pct']].dropna()
+
+# --- Gruppieren nach MVP vs. Nicht-MVP und Mittelwerte berechnen ---
+effizienz_means = effizienz_df.groupby('is_mvp')[['ts_pct', 'efg_pct']].mean().T
+effizienz_means.columns = ['Nicht-MVPs', 'MVP-Kandidaten'] if False in effizienz_means.columns else ['MVP-Kandidaten']
+
+# --- Visualisierung ---
+st.header("🎯Effizienzvergleich: MVPs vs. Nicht-MVPs")
+
+fig, ax = plt.subplots(figsize=(7, 4))
+effizienz_means.plot(kind='bar', ax=ax, color=['#2a9d8f', '#f4a261'])
+ax.set_title('Durchschnittliche Effizienzmetriken (TS% und eFG%)', fontsize=14)
+ax.set_ylabel('Wert')
+ax.set_xlabel('Effizienz-Metrik')
+ax.grid(axis='y')
+ax.legend(title='Spielertyp', loc='lower right')
+st.pyplot(fig)
+
+# --- Interpretation ---
+st.markdown(f"""
+
+<b>💡 Interpretation:</b><br><br>
+MVP-Kandidaten zeigen im Durchschnitt höhere Werte bei beiden Effizienzmetriken:<br><br>
+🔹 <b>True Shooting % (TS%)</b>: berücksichtigt auch Freiwürfe und 3-Punkte-Würfe.<br>
+🔹 <b>Effective FG%</b>: gewichtet 3-Punkte-Würfe stärker.<br><br>
+Dies deutet darauf hin, dass MVPs nicht nur mehr punkten – sie tun es auch effizienter.
+
+""", unsafe_allow_html=True)
+
+

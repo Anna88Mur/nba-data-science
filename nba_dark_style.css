@@ -1,3 +1,7 @@
+body, html {
+    font-size: 18px;  
+}
+
 .centered-title {
     text-align: center;
     font-size: 48px;
@@ -9,6 +13,7 @@
 
 .team-section {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px
     color: #f0f6fc;
     background-color: #161b22;
     padding: 20px;
@@ -20,7 +25,7 @@
 
 .team-section h2 {
     color: #58a6ff;
-    border-bottom: 2px solid #58a6ff;
+    border-bottom: 2px solid #94c5fc;
     padding-bottom: 5px;
 }
 
@@ -34,10 +39,12 @@
 }
 
 .team-section a {
-    color: #58a6ff;
+    color: #9dc9fb;
     text-decoration: none;
+    font-size: 18px;
 }
 
 .team-section a:hover {
     text-decoration: underline;
 }
+
