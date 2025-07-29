@@ -139,10 +139,37 @@ avg_values["MVP Status"] = avg_values["is_mvp"].map({True: "MVP-Kandidaten", Fal
 # melt() macht aus einer Matrix eine Liste – superpraktisch für Visualisierung oder lange Tabellen.
 melted = avg_values.melt(id_vars="MVP Status", value_vars=metrics, var_name="Stat", value_name="Wert")
 
+metric_labels = {
+    "pts_per_g": "Punkte/Spiel",
+    "ast_per_g": "Assists/Spiel",
+    "trb_per_g": "Rebounds/Spiel",
+    "per": "Effizienzrating (PER)",
+    "ws": "Gewinnanteil (WS)"
+    }
+
+melted["Stat"] = melted["Stat"].map(metric_labels)
+
 # Plotten
 fig, ax = plt.subplots(figsize=(10, 5))
+
 sns.barplot(data=melted, x="Stat", y="Wert", hue="MVP Status", ax=ax)
-ax.set_title(f"Durchschnittswerte in der Saison {selected_season}")
+ax.set_title(f"Durchschnittliche Leistungskennzahlen von MVP-Kandidaten und anderen Spielern ({selected_season})")
+
+for p in ax.patches:
+    ax.annotate(
+        f"{p.get_height():.1f}", 
+        (p.get_x() + p.get_width() / 2., p.get_height()),
+        ha='center', 
+        va='center', 
+        xytext=(0, 5), 
+        textcoords='offset points'
+    )
+
+plt.xticks(rotation=15)
+ax.set_xlabel("Leistungsmetriken")
+ax.set_ylabel("Durchschnittswert")
+
+
 st.pyplot(fig)
 
 st.markdown(f"""
