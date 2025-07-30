@@ -28,13 +28,12 @@ with col1:
 with col2:
     st.markdown("""
     **Isabelle Haehl**  
-    Data Analyst  
+    Data Scientist  
     [LinkedIn](https://www.linkedin.com/in/isabelle-haehl) | [GitHub](https://github.com/isabellehaehl)
     
-    <br>
-    🟠 Organisation der Aufgaben über Jira  
-    🟠 Deskriptive Analysen  
-    🟠 Machine Learning
+    🟠 Organisation der Aufgaben über Jira  <br>
+    🟠 Deskriptive Analysen <br> 
+    🟠 Definieren und Erstellen des Erfolgs-Scores für die Analysen und das ML Modell<br>
     """, unsafe_allow_html=True)
 
 col3, col4 = st.columns([1, 5])
@@ -44,7 +43,7 @@ with col3:
 with col4:
     st.markdown("""
     **Florian Löb**  
-    Data Analyst  
+    Data Scientist  
     [LinkedIn](https://www.linkedin.com/in/florian-loeb) | [GitHub](https://github.com/florian-loeb)
     <br>
     🟠 Projektstrukturierung und Koordination  

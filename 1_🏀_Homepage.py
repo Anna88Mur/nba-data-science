@@ -35,7 +35,10 @@ Tauche ein in die faszinierende Welt des Basketballs und erlebe die spannende Ge
 Unsere Anwendung richtet sich sowohl an leidenschaftliche Basketballfans als auch an professionelle Sportanalysten.  
 Wir haben spannende Auswertungen zusammengestellt, um die großen Momente und Muster des Spiels sichtbar zu machen.
 
-📊 Auf dieser Startseite findest du zentrale KPIs, die zeigen, wie einzigartig und von Erfolgen geprägt die Geschichte der NBA ist.
+📊 Auf dieser Startseite findest du zentrale KPIs, die zeigen, wie einzigartig und von Erfolgen geprägt die Geschichte der NBA ist.<br>
+    <div style='text-align: right; font-size: 0.85rem; margin-top: 2rem;'>
+            Unsere Datenanalyse wurde mit Stand Juli 2025 durchgeführt.
+    </div>        
 </div>
 """, unsafe_allow_html=True)
 
