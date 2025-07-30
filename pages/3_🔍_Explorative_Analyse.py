@@ -233,22 +233,26 @@ with tab2:
     ]].sort_values(by='score_d_number_diff', ascending=True).head(10)
 
     st.subheader("🏅 Top 10 Überperformer (inkl. Undrafted)")
-
     st.dataframe(
         top10_up.style.format({
             'sum_mp': lambda x: f'{x:,.0f}'.replace(',', '.'),
-            'avg_score_d_number': '{:.2f}',
-            'score_d_number_diff': '{:.2f}'
+            'success_score': '{:.1f}',
+            'avg_score_d_number': '{:.1f}',
+            'score_d_number_diff': '{:.1f}'
         }),
-        use_container_width=True)
+        use_container_width=True
+    )
 
     st.subheader("🚫 Top 10 Busts (nur gedraftete Spieler)")
-    st.dataframe(top10_down.style.format({
-        'sum_mp': lambda x: f'{x:,.0f}'.replace(',', '.'),
-        'avg_score_d_number': '{:.2f}',
-        'score_d_number_diff': '{:.2f}'
-    }),
-        use_container_width=True)
+    st.dataframe(
+        top10_down.style.format({
+            'sum_mp': lambda x: f'{x:,.0f}'.replace(',', '.'),
+            'success_score': '{:.1f}',
+            'avg_score_d_number': '{:.1f}',
+            'score_d_number_diff': '{:.1f}'
+        }),
+        use_container_width=True
+    )
 
     st.markdown("""
     <div style='padding: 1rem; background-color: #1f2633; border-radius: 0.5rem; color: white;'>

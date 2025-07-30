@@ -19,7 +19,7 @@ show_sidebar_info()
 
 load_custom_css()
 
-st.markdown('<div class="centered-title">🏀 NBA Data Science Projekt</div>', unsafe_allow_html=True)
+st.markdown('<div class="centered-title">NBA Data Science Projekt</div>', unsafe_allow_html=True)
 
 
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -29,15 +29,15 @@ with col2:
 # Zeige eine Information mit zusätzlichen Hinweisen zur Bedienung der App
 st.markdown("""
 <div class="team-section">
-    <h2>👋 Willkommen zu unserem NBA-Projekt!</h2> 
+    <h2>👋 Willkommen zu unserem NBA-Projekt!</h2>
+            <p> </p>
 Tauche ein in die faszinierende Welt des Basketballs und erlebe die spannende Geschichte der NBA durch die Linse der Datenanalyse.
-
-Unsere Anwendung richtet sich sowohl an leidenschaftliche Basketballfans als auch an professionelle Sportanalysten.  
-Wir haben spannende Auswertungen zusammengestellt, um die großen Momente und Muster des Spiels sichtbar zu machen.
-
+            Unsere Anwendung richtet sich sowohl an leidenschaftliche Basketballfans als auch an professionelle Sportanalysten.
+            Wir haben spannende Auswertungen zusammengestellt, um die großen Momente und Muster des Spiels sichtbar zu machen.
+ <p> </p>
 📊 Auf dieser Startseite findest du zentrale KPIs, die zeigen, wie einzigartig und von Erfolgen geprägt die Geschichte der NBA ist.<br>
     <div style='text-align: right; font-size: 0.85rem; margin-top: 2rem;'>
-            Unsere Datenanalyse wurde mit Stand Juli 2025 durchgeführt.
+            Stand: Juli 2025
     </div>        
 </div>
 """, unsafe_allow_html=True)
@@ -49,30 +49,27 @@ st.markdown("<br><br>", unsafe_allow_html=True)
 col4, col5, col6 = st.columns(3)
 
 col4.metric("🏆 Erste Meistermannschaft", "Philadelphia Warriors", "1947")
-col4.image("images/warriors_logo.png",
-           caption="Warriors", width=120)
+col4.image("images/golden_state_warriors.png", width=150)
 
-col5.metric("📈 Längste Siegesserie", "33 Spiele", "L.A. Lakers 1971/72")
-col5.image("images/lakers_logo.png", caption="Lakers", width=150)
+col5.metric("📈 Längste Siegesserie", "LA Lakers, 1971/72", "33 Spiele")
+col5.image("images/la_lakers.png", width=150)
 
-col6.metric("🔥 Punkterekord in einem Spiel", "100 Punkte",
-            "Wilt Chamberlain (Philadelphia Warriors, 1962)")
-col6.image("images/chamberlain.jpg",
-           caption="Wilt Chamberlain", width=120)
+col6.metric("🔥 Punkterekord in einem Spiel", "Wilt Chamberlain, 1962", "100 Punkte")
+col6.image("images/wilt_chamberlain.jpeg", width=150)
 
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 
 col7, col8, col9 = st.columns(3)
 
-col7.metric("🔥 Playoff-Rekordpunkte", "63 Punkte", "Michael Jordan 1986")
-col7.image("images/jordan_playoff.jpg", caption="Jordan", width=120)
+col7.metric("🔥 Playoff-Rekordpunkte", "Michael Jordan, 1986", "63 Punkte")
+col7.image("images/michael_jordan.jpeg", width=150)
 
 col8.metric("💎 Meiste MVPs", "Kareem Abdul-Jabbar", "6 MVPs")
-col8.image("images/kareem_logo.jpg", caption="Lakers", width=120)
+col8.image("images/kareem-abdul-jabbar.jpg", width=150)
 
 col9.metric("✊ Erster afroamerikanischer NBA-Spieler", "Earl Lloyd", "1950")
-col9.image("images/earl_lloyd.jpg", caption="Washington Capitols", width=120)
+col9.image("images/earl_lloyd.jpg", width=150)
 
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 
@@ -147,5 +144,3 @@ fig.update_traces(
     hovertemplate="<b>%{y}</b><br>%{customdata[0]}<br>Karriere: %{customdata[1]} – %{customdata[2]}<extra></extra>"
 )
 st.plotly_chart(fig, use_container_width=True)
-
-st.markdown("### 📊 Entdecke weitere Analysen im Menü links!")
