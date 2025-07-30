@@ -1,5 +1,5 @@
 import streamlit as st
-from style_utils import set_app_config, show_sidebar_info, load_custom_css
+from style_utils import set_app_config, show_sidebar_info, load_custom_css, apply_dark_theme
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -140,6 +140,7 @@ with tab2:
     draft = pd.read_csv("data/data_analyse_60_height_draft.csv")
 
     # Plot erzeugen
+    apply_dark_theme()
     fig, ax = plt.subplots(figsize=(8, 5))
     sns.boxplot(data=draft, x='d_group',
                 y='success_score',
@@ -301,6 +302,7 @@ with tab3:
     zeige_vergleichslinie = st.checkbox(
         "📉 Vergleichslinie (1994–1998) anzeigen", value=False)
 
+    apply_dark_theme()
     # Plot erstellen
     fig, ax = plt.subplots(figsize=(12, 6))
 

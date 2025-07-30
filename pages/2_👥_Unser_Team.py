@@ -30,7 +30,6 @@ with col2:
     **Isabelle Haehl**  
     Data Scientist  
     [LinkedIn](https://www.linkedin.com/in/isabelle-haehl) | [GitHub](https://github.com/isabellehaehl)
-    
     🟠 Organisation der Aufgaben über Jira  <br>
     🟠 Deskriptive Analysen <br> 
     🟠 Definieren und Erstellen des Erfolgs-Scores für die Analysen und das ML Modell<br>

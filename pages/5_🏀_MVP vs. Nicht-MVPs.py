@@ -1,5 +1,5 @@
 import streamlit as st
-from style_utils import set_app_config, show_sidebar_info, load_custom_css
+from style_utils import set_app_config, show_sidebar_info, load_custom_css,apply_dark_theme
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -49,6 +49,7 @@ with col1:
 
     st.header("📈 Boxplot: Alter der MVP-Kandidaten", anchor=False)
 
+    apply_dark_theme()
     fig1, ax1 = plt.subplots(figsize=(7, 4))
     sns.boxplot(data=df_mvp, x='age',
                 color='skyblue',
@@ -92,6 +93,7 @@ with col2:
     # --- Histogramm: Alter der MVP-Spieler ---
     st.header("📊 Histogramm: Alter der MVP-Kandidaten", anchor=False)
 
+    apply_dark_theme()
     fig2, ax2 = plt.subplots(figsize=(7, 4))
     sns.histplot(df_mvp['age'],
                  bins=15,
@@ -113,6 +115,7 @@ with col2:
 # 📉 Histogramm der award_share-Werte (Stimmenanteil)
 st.header("🏆 Verteilung MVP-Stimmenanteil", anchor="verteilung-mvp-stimmen")
 
+apply_dark_theme()
 fig_award, ax_award = plt.subplots(figsize=(10, 5))
 sns.histplot(df_mvp['award_share'],
              bins=30,
@@ -184,6 +187,7 @@ metric_labels = {
 melted["Stat"] = melted["Stat"].map(metric_labels)
 
 # Plotten
+apply_dark_theme()
 fig, ax = plt.subplots(figsize=(10, 5))
 
 sns.barplot(data=melted, x="Stat", y="Wert", hue="MVP Status", ax=ax)
@@ -236,6 +240,7 @@ effizienz_means.columns = [
 # --- Visualisierung ---
 st.header("🎯Effizienzvergleich: MVPs vs. Nicht-MVPs")
 
+apply_dark_theme()
 fig, ax = plt.subplots(figsize=(7, 4))
 effizienz_means.plot(kind='bar', ax=ax, color=['#2a9d8f', '#f4a261'])
 ax.set_title('Durchschnittliche Effizienzmetriken (TS% und eFG%)', fontsize=14)
