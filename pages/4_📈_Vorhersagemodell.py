@@ -1,5 +1,5 @@
 import streamlit as st
-from style_utils import set_app_config, show_sidebar_info, load_custom_css
+from style_utils import set_app_config, load_custom_css
 import pandas as pd
 import numpy as np
 import joblib
@@ -15,7 +15,7 @@ set_app_config(
     icon="📈",
     layout="wide"
 )
-show_sidebar_info()
+
 load_custom_css()
 
 st.markdown('<div class="centered-title">Vorhersagemodell</div>',
@@ -265,7 +265,7 @@ with col_balken:
                 range=[min_score - 5, max_score + 5],
                 tickfont=dict(color="white"),
                 title=dict(
-                    text="Score",
+                    text="Success Score",
                     font=dict(color="white", size=20)
                 )
             ),
@@ -609,7 +609,7 @@ with TABS[2]:
         alt.Chart(busts)
         .mark_bar(color="green")
         .encode(
-            x=alt.X("error:Q", title="Abweichung (True - Pred)"),
+            x=alt.X("error:Q", title="Abweichung (True - Pred)", axis=alt.Axis(format=".0f")),
             y=alt.Y("player:N", sort="-x", title=""),
             tooltip=["player", "true", "pred", "error"],
         )
@@ -622,7 +622,7 @@ with TABS[2]:
         alt.Chart(steals)
         .mark_bar(color="red")
         .encode(
-            x=alt.X("error:Q", title="Abweichung (True - Pred)"),
+            x=alt.X("error:Q", title="Abweichung (True - Pred)", axis=alt.Axis(format=".0f")),
             y=alt.Y("player:N", sort="x", title=""),
             tooltip=["player", "true", "pred", "error"],
         )

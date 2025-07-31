@@ -8,18 +8,10 @@ def set_app_config(title: str, icon: str = "📊", layout: str = "wide"):
         layout=layout
     )
 
-
-def show_sidebar_info():
-    st.sidebar.title("📂 Navigation")
-    st.sidebar.caption("⬆️ Seitenübersicht")
-    st.sidebar.info("Wähle links eine Analyse.")
-
-
 def load_custom_css(path="nba_dark_style.css"):
     with open(path) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
     print("🔵 CSS wurde geladen.")    
-
 
 def apply_dark_theme():
     """Wendet die Einstellungen des dunklen Themas auf das aktuelle Diagramm an"""

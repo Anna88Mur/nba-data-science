@@ -1,5 +1,5 @@
 import streamlit as st
-from style_utils import set_app_config, show_sidebar_info, load_custom_css, apply_dark_theme
+from style_utils import set_app_config, load_custom_css, apply_dark_theme
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -14,7 +14,7 @@ set_app_config(
     icon="🔍",
     layout="wide"
 )
-show_sidebar_info()
+
 load_custom_css()
 
 st.markdown('<div class="centered-title">Explorative Analyse</div>',

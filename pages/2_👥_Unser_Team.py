@@ -1,5 +1,5 @@
 import streamlit as st
-from style_utils import set_app_config, show_sidebar_info, load_custom_css
+from style_utils import set_app_config, load_custom_css
 from streamlit_mermaid import st_mermaid
 from pathlib import Path
 import base64
@@ -10,7 +10,6 @@ set_app_config(
     layout="wide"
 )
 
-show_sidebar_info()
 load_custom_css()
 
 st.markdown('<div class="centered-title">Unser Team</div>',

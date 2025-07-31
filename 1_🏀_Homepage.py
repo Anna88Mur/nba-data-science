@@ -3,7 +3,7 @@ import os
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from style_utils import set_app_config, show_sidebar_info, load_custom_css
+from style_utils import set_app_config, load_custom_css
 
 os.chdir(os.path.dirname(__file__))
 
@@ -15,8 +15,6 @@ set_app_config(
     layout="wide"
 )
 
-show_sidebar_info()
-
 load_custom_css()
 
 st.markdown('<div class="centered-title">NBA Data Science Projekt</div>', unsafe_allow_html=True)
@@ -24,7 +22,7 @@ st.markdown('<div class="centered-title">NBA Data Science Projekt</div>', unsafe
 
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("nba2.jpg", width=900)
+    st.image("images/nba.jpg", width=900)
 
 # Zeige eine Information mit zusätzlichen Hinweisen zur Bedienung der App
 st.markdown("""
@@ -137,6 +135,9 @@ fig.update_layout(
         tickformat="%Y",    # Nur Jahr anzeigen
         tick0="1950-01-01",
         dtick="M60",        # alle 60 Monate = 5 Jahre
+    ),
+    yaxis=dict(
+        title_text=""
     )
 )
 
