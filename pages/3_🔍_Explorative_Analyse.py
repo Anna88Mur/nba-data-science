@@ -20,18 +20,6 @@ load_custom_css()
 st.markdown('<div class="centered-title">Explorative Analyse</div>',
             unsafe_allow_html=True)
 
-# st.markdown("""
-# <div class="team-section">
-#    <h2>Inhalt</h2>
-#        <p></p>
-#       <ul>
-#           <li>Heatmaps zu Korrelationen physischer/spielerischer Merkmale</li>
-#           <li>Draft-Analysen</li>
-#           <li>Dreipunktewurf-Analysen</li>
-# #      </ul>
-
-# </div>
-# """, unsafe_allow_html=True)
 
 
 tab1, tab2, tab3 = st.tabs(

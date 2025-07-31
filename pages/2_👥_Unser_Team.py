@@ -16,9 +16,7 @@ load_custom_css()
 st.markdown('<div class="centered-title">Unser Team</div>',
             unsafe_allow_html=True)
 
-import streamlit as st
-from pathlib import Path
-import base64
+
 
 # Funktion: Lokales Bild in Base64 konvertieren
 def img_to_base64(img_path):
