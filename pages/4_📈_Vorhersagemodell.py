@@ -57,11 +57,11 @@ TABS = st.tabs([
 
 # 2a – Success Score (Spieler‑Input) -----------------------------------------
 with TABS[0]:
-    col_input, col_space, col_balken = st.columns([14, 1, 5])
+    col_input, col_space, col_balken = st.columns([13, 1, 6])
 
     with col_input:
         st.write("### ⭐ Vorhersage des Success Scores")
-        st.info("ℹ️ Gib die Basisdaten eines Spielers ein, um seinen langfristigen Success Score vorherzusagen und mit ähnlichen Spielern zu vergleichen.")
+        st.info("ℹ️ Gib die Spielerdaten ein, um seinen langfristigen Success Score vorherzusagen und mit ähnlichen Spielern zu vergleichen.")
         st.markdown("#### 🏀 Physische Attribute")
 
         # --- Physische Attribute ---
@@ -107,7 +107,7 @@ with TABS[0]:
                 DRAFT_GRP = 6
         else:
             # Spieler undrafted
-            DRAFT_NUM = 0
+            DRAFT_NUM = 61
             DRAFT_AGE = 0
             DRAFT_GRP = 7
 
@@ -231,7 +231,7 @@ with col_balken:
             y=score_pred,
             text=f"{score_pred:.1f} ({percentile:.0f}. Perzentil)",
             showarrow=False,
-            font=dict(color="white", size=14),
+            font=dict(color="white", size=15),
             yshift=10
         )
 
@@ -241,7 +241,7 @@ with col_balken:
             y=min_score,
             text=f"Min: {min_score:.1f}",
             showarrow=False,
-            font=dict(color="white", size=14),
+            font=dict(color="white", size=15),
             yshift=-20
         )
 
@@ -251,7 +251,7 @@ with col_balken:
             y=max_score,
             text=f"Max: {max_score:.1f}",
             showarrow=False,
-            font=dict(color="white", size=14),
+            font=dict(color="white", size=15),
             yshift=10
         )
 
@@ -266,7 +266,7 @@ with col_balken:
                 tickfont=dict(color="white"),
                 title=dict(
                     text="Score",
-                    font=dict(color="white")
+                    font=dict(color="white", size=20)
                 )
             ),
             xaxis=dict(
@@ -406,7 +406,7 @@ with TABS[1]:
                         y=user_val,
                         text=perc_text,
                         showarrow=False,
-                        font=dict(color="white", size=14),
+                        font=dict(color="white", size=15),
                         yshift=10
                     )
 
@@ -415,7 +415,7 @@ with TABS[1]:
                     y=min_score,
                     text=f"Min: {min_fmt}",
                     showarrow=False,
-                    font=dict(color="white", size=12),
+                    font=dict(color="white", size=15),
                     yshift=-20
                 )
                 fig.add_annotation(
@@ -423,7 +423,7 @@ with TABS[1]:
                     y=max_score,
                     text=f"Max: {max_fmt}",
                     showarrow=False,
-                    font=dict(color="white", size=12),
+                    font=dict(color="white", size=15),
                     yshift=10
                 )
 
@@ -435,12 +435,12 @@ with TABS[1]:
                     yaxis=dict(
                         range=[min_score - (0.05 * abs(max_score)), max_score + (0.05 * abs(max_score))],
                         tickfont=dict(color="white"),
-                        title=None  # y-Achsenbeschriftung entfernen
+                        title=None
                     ),
                     xaxis=dict(showticklabels=False),
                     title=dict(
                         text=title_map.get(feature, feature.replace("_", " ").title()),
-                        font=dict(color="white", size=14),
+                        font=dict(color="white", size=20),
                         x=0.5,                 # zentriert (0=links, 0.5=Mitte, 1=rechts)
                         xanchor="center",      # Ankerpunkt in der Mitte
                         yanchor="top"
@@ -514,7 +514,7 @@ with TABS[2]:
             x=["Score"],
             y=[max_cluster - min_cluster],
             base=min_cluster,
-            width=0.4,
+            width=0.3,
             marker=dict(color="gray", opacity=0.3),
             hoverinfo="skip",
             showlegend=False
@@ -533,7 +533,7 @@ with TABS[2]:
             y=player_pred,
             text=f"Pred: {player_pred:.1f}",
             showarrow=False,
-            font=dict(color="white", size=12),
+            font=dict(color="white", size=15),
             yshift=12
         )
 
@@ -550,7 +550,7 @@ with TABS[2]:
             y=player_true,
             text=f"True: {player_true:.1f}",
             showarrow=False,
-            font=dict(color="white", size=12),
+            font=dict(color="white", size=15),
             yshift=-15
         )
 
@@ -560,7 +560,7 @@ with TABS[2]:
             y=min_cluster,
             text=f"Min: {min_cluster:.1f}",
             showarrow=False,
-            font=dict(color="white", size=12),
+            font=dict(color="white", size=15),
             yshift=-20
         )
 
@@ -570,22 +570,22 @@ with TABS[2]:
             y=max_cluster,
             text=f"Max: {max_cluster:.1f}",
             showarrow=False,
-            font=dict(color="white", size=12),
+            font=dict(color="white", size=15),
             yshift=10
         )
 
         # Layout
         fig.update_layout(
-            height=300,
+            height=600,
             plot_bgcolor="#0E1117",
             paper_bgcolor="#0E1117",
-            margin=dict(l=200, r=200, t=30, b=30),
+            margin=dict(l=400, r=400, t=30, b=30),
             yaxis=dict(
                 range=[min_cluster - 5, max_cluster + 5],
                 tickfont=dict(color="white"),
                 title=dict(
                     text="Success Score",
-                    font=dict(color="white")
+                    font=dict(color="white", size=20)
                 )
             ),
             xaxis=dict(showticklabels=False),
@@ -595,8 +595,8 @@ with TABS[2]:
         st.plotly_chart(fig, use_container_width=True)
 
         # Textausgabe
-        st.write(f"**Abweichung:** {player_error:.1f}")
-        st.write(f"**Bewertung:** {rating}")
+        st.markdown(f"<div style='text-align:center; font-size:22px;'> {rating}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align:center; font-size:15px;'>Abweichung: {player_error:.1f}</div>", unsafe_allow_html=True)
     st.markdown("---")
 
 
