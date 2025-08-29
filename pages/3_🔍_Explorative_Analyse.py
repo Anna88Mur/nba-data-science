@@ -21,7 +21,6 @@ st.markdown('<div class="centered-title">Explorative Analyse</div>',
             unsafe_allow_html=True)
 
 
-
 tab1, tab2, tab3 = st.tabs(
     ["📈 Korrelationen", "📊 Draft-Analysen", "🔍 Dreipunktewurf-Analysen"])
 
@@ -48,7 +47,6 @@ with tab1:
 
 
 # Variante 3
-
 
     def cluster_corr_matrix(corr_matrix):
         """Korrelationsmatrix nach Clustern sortieren"""
@@ -261,60 +259,95 @@ with tab3:
 
     st.markdown("""
     <div style='padding: 1rem; background-color: #1f2633; border-radius: 0.5rem; color: white;'>
-    <b> Analysefrage </b>: Hat Stephen Curry mit seinem Erfolg das Spielverhalten bzgl. der Dreipunktewürfe in der NBA beeinflusst?
+    <b> Analysefrage </b>: Wie hat sich der Spielstil historisch im Hinblick auf Dreipunktwürfe verändert? – Analyse auf Liga- und Spielerebene
+    <br><br>
+        <b>Hinweise zur Interpretation:</b><br><br>
+        - Werte über 100 (bei Normalisierung) bedeuten eine Verbesserung gegenüber dem Basisjahr.<br>
+        - Die Liga-Durchschnittswerte sind als Linien dargestellt, Spielerwerte als zusätzliche farbige Linien.<br>
+        - Aktivieren Sie die Checkboxen, um den Anteil der Dreierwürfe und die Normalisierung einzublenden.<br>
+        <b>- FG3% - Dreipunkt-Wurfquote</b> → Zeigt, wie sich die Trefferquote bei Dreipunktwürfen verbessert hat.<br>
+        <b>- FG3A/FGA% - Anteil der Dreipunktwurfversuche an allen Wurfversuchen</b> → Zeigt, wie stark der Anteil der Dreierwürfe am gesamten Wurfvolumen gestiegen ist.
     </div>
     """, unsafe_allow_html=True)
 
     # Daten laden
-    merged_with_all_star_60 = pd.read_csv("data/merged_with_all_star_60.csv")
+    # merged_with_all_star_60 = pd.read_csv("data/merged_with_all_star_60.csv")
+    NBA_3_Punkte = pd.read_csv("data/NBA_Dataset.csv")
 
-    # Ligadurchschnitt FG3% pro Saison
-    fg3_by_season = merged_with_all_star_60.groupby(
-        "season")["fg3_pct"].mean().reset_index()
+    basisjahr=1982
+    #  --- Ligadurchschnitt ---
+    # - fg3_pct- - Zeigt, wie sich die Trefferquote bei Dreipunktwürfen verbessert hat
+    # - fg3a_per_fga_pct - - Zeigt, wie stark der Anteil der Dreierwürfe am gesamten Wurfvolumen gestiegen ist.
 
-    # Beispielwerte für Vergleichslinie
-    val_94 = fg3_by_season[fg3_by_season["season"]
-                           == 1994]["fg3_pct"].values[0]
-    val_98 = fg3_by_season[fg3_by_season["season"]
-                           == 1998]["fg3_pct"].values[0]
+    fg3_by_season = NBA_3_Punkte.groupby("season")["fg3_pct"].mean().reset_index()
+    fg3a_share_by_season = NBA_3_Punkte.groupby("season")["fg3a_per_fga_pct"].mean().reset_index()
+
+
 
     # Spieler-Dropdown
     player_list = [""] + sorted(
-        merged_with_all_star_60["player"].dropna().unique().tolist())
+        NBA_3_Punkte["player"].dropna().unique().tolist())
     player_name = st.selectbox(
         "🔍 Spieler wählen",
         options=player_list,
         index=0
     )
+    # Checkboxen
+    zeige_fg3a = st.checkbox("📈 Anteil der Dreierwürfe anzeigen (FG3A/FGA%)", value=False)
+    normalisiert = st.checkbox("📊 Normalisierung (Basisjahr 1982 = 100)", value=False)
 
     # Gefilterte Daten für den Spieler (wenn vorhanden)
     if player_name:
-        player_fg3_df = merged_with_all_star_60[merged_with_all_star_60['player'] == player_name]
+        player_df = NBA_3_Punkte[NBA_3_Punkte['player'] == player_name]
+        player_fg3_by_season = player_df.groupby("season")["fg3_pct"].mean().reset_index()
+        player_fg3a_by_season = player_df.groupby("season")["fg3a_per_fga_pct"].mean().reset_index()
 
-    zeige_vergleichslinie = st.checkbox(
-        "📉 Vergleichslinie (1994–1998) anzeigen", value=False)
+
+    # Normalisierung, falls aktiviert
+    if normalisiert:
+        fg3_norm = fg3_by_season.copy()
+        fg3a_norm = fg3a_share_by_season.copy()
+        
+        fg3_basiswert = fg3_norm[fg3_norm["season"] == basisjahr]["fg3_pct"].values[0]
+        fg3a_basiswert = fg3a_norm[fg3a_norm["season"] == basisjahr]["fg3a_per_fga_pct"].values[0]
+        
+        fg3_norm["fg3_norm"] = fg3_norm["fg3_pct"] / fg3_basiswert * 100
+        fg3a_norm["fg3a_norm"] = fg3a_norm["fg3a_per_fga_pct"] / fg3a_basiswert * 100
+        
+        if player_name:
+            player_fg3_norm = player_fg3_by_season.copy()
+            player_fg3a_norm = player_fg3a_by_season.copy()
+            player_fg3_norm["fg3_norm"] = player_fg3_norm["fg3_pct"] / fg3_basiswert * 100
+            player_fg3a_norm["fg3a_norm"] = player_fg3a_norm["fg3a_per_fga_pct"] / fg3a_basiswert * 100
 
     apply_dark_theme()
+
     # Plot erstellen
     fig, ax = plt.subplots(figsize=(12, 6))
 
-    # Ligadurchschnitt
+    if normalisiert:
+        sns.lineplot(data=fg3_norm, x="season", y="fg3_norm", marker="o", linewidth=2, label="FG3% (normiert)", ax=ax)
+        if zeige_fg3a:
+            sns.lineplot(data=fg3a_norm, x="season", y="fg3a_norm", marker="o", linewidth=2, label="FG3A/FGA% (normiert)", ax=ax)
+        if player_name:
+            sns.lineplot(data=player_fg3_norm, x="season", y="fg3_norm", marker="o", linewidth=2, label=f"{player_name} FG3% (normiert)", ax=ax)
+            if zeige_fg3a:
+                sns.lineplot(data=player_fg3a_norm, x="season", y="fg3a_norm", marker="o", linewidth=2, label=f"{player_name} FG3A/FGA% (normiert)", ax=ax)
+        ax.axhline(100, color="gray", linestyle="--", linewidth=1)
+        ax.set_ylabel("Index (Basisjahr = 100)")
+    else:
+        sns.lineplot(data=fg3_by_season, x="season", y="fg3_pct", marker="o", linewidth=2, label="Ligadurchschnitt FG3%", ax=ax)
+        if zeige_fg3a:
+            sns.lineplot(data=fg3a_share_by_season, x="season", y="fg3a_per_fga_pct", marker="o", linewidth=2, label="Ligadurchschnitt FG3A/FGA%", ax=ax)
+        if player_name:
+            sns.lineplot(data=player_fg3_by_season, x="season", y="fg3_pct", marker="o", linewidth=2, label=f"{player_name} FG3%", ax=ax)
+            if zeige_fg3a:
+                sns.lineplot(data=player_fg3a_by_season, x="season", y="fg3a_per_fga_pct", marker="o", linewidth=2, label=f"{player_name} FG3A/FGA%", ax=ax)
+        ax.set_ylabel("FG3% / FG3A-FG Anteil")
 
-    sns.lineplot(data=fg3_by_season, x='season', y='fg3_pct',
-                 marker='o', color='#40E0D0', linewidth=3, label='Ligadurchschnitt FG3%', ax=ax)
-
-    # Vergleichslinie
-    if zeige_vergleichslinie:
-        ax.plot([1994, 1998], [val_94, val_98], color='red', linewidth=3,
-                linestyle='--', label='Hypothetische Entwicklung')
-
-    # Spielerlinie (nur wenn Spieler gewählt wurde)
-    if player_name:
-        sns.lineplot(data=player_fg3_df, x='season', y='fg3_pct',
-                     marker='o', color='orange', linewidth=3, label=f'{player_name} FG3%', ax=ax)
-
+    
     # Plot anpassen
-    ax.set_title("Vergleich: FG3%-Entwicklung – Liga vs. Spieler")
+    ax.set_title("Historische Entwicklung der Dreierwürfe – Liga vs. Spieler")
     ax.set_xlabel("Saisonjahr")
     ax.set_ylabel("FG3%")
     ax.grid(True)
@@ -326,11 +359,21 @@ with tab3:
 
     st.markdown("""
         <div style='padding: 1rem; background-color: #1f2633; border-radius: 0.5rem; color: white;'>
-        <b>Antwort: Nein</b><br><br>
+        <b>Analyseergebnis:</b>   <br><br>
+        Aus der Analyse geht hervor, dass die Trefferquote bei Dreipunktwürfen über die Jahre gestiegen ist,  
+        jedoch nicht so stark wie der Anteil der tatsächlich ausgeführten Dreipunktwürfe am gesamten Wurfvolumen.       
+        <br><br>
+        🏀<b> Was geschah in der NBA-Saison 2015/2016?</b>
+                
+        Stephen Curry (Golden State Warriors) spielte eine historische Saison:<br><br>
+        - Er wurde einstimmig zum MVP gewählt<br>
+        - Er stellte einen Rekord mit 402 erfolgreichen Dreipunktwürfen auf (der vorherige Rekord lag bei 286!)
+        Die Warriors spielten im Stil von „pace and space“ und setzten stark auf Dreierwürfe.<br><br>
+        <b>Im Grunde begann mit der Saison 2016 die Ära des Dreipunkt-Basketballs:</b>   <br>
+        Teams begannen massenhaft, ihre Anzahl an Dreierversuchen zu erhöhen.<br>
+        📈 Auf den Grafiken mit fg3a_per_fga_pct sieht man einen deutlichen Sprung nach oben ab 2015.<br>
+        Vorher stieg die Zahl der Dreier langsam, doch nach Curry und den Warriors wurde der Trend explosiv.
 
-        <b>Wissenswertes:</b><br>
-        • 1979/80: Einführung der Dreipunktelinie in der NBA<br>
-        • Entfernung: 7,24 m vom Korb<br>
-        • 1994–1997: Temporäre Verkürzung der Entfernung auf 6,75 m
+
         </div>
         """, unsafe_allow_html=True)
